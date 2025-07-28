@@ -22,7 +22,7 @@ This solution automatically rotates Windows instance passwords on a configurable
 - **Multi-instance support** from single deployment
 - **Secure storage** with encrypted AWS Secrets Manager
 - **Complete audit trail** via CloudWatch logging
-- **Compliance ready** for SOX, PCI DSS, HIPAA requirements
+- **Compliance ready** for SOX
 
 ### Architecture
 
@@ -63,7 +63,19 @@ Instances need IAM instance profile with `AmazonSSMManagedInstanceCore` policy:
     }]
 }
 ```
+### To install SSM while EC2 Windows is being deployed
 
+Add the following script the the User data section:
+
+```bash
+<powershell>
+$dir = $env:TEMP + "\ssm"
+New-Item -ItemType directory -Path $dir -Force
+cd $dir
+(New-Object System.Net.WebClient).DownloadFile("https://s3.amazonaws.com/ec2-downloads-windows/SSMAgent/latest/windows_amd64/AmazonSSMAgentSetup.exe", $dir + "\AmazonSSMAgentSetup.exe")
+Start-Process .\AmazonSSMAgentSetup.exe -ArgumentList @("/q", "/log", "install.log") -Wait
+</powershell>
+```
 ## Installation
 
 1. **Create project directory:**
