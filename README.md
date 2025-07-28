@@ -76,6 +76,13 @@ cd $dir
 Start-Process .\AmazonSSMAgentSetup.exe -ArgumentList @("/q", "/log", "install.log") -Wait
 </powershell>
 ```
+To test connectivity for SSM, utilize the following command to call the SSM instance:
+
+```bash
+aws ssm send-command --instance-ids i-0591a47393bab6406 --document-name AWS-RunPowerShellScript --parameters commands="dir c:"
+i-03b0823a7d3893568
+```
+
 ## Installation
 
 1. **Create project directory:**
